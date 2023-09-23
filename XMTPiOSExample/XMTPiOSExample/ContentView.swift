@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import Starscream
 import XMTP
 
 struct ContentView: View {
@@ -46,59 +47,68 @@ struct ContentView: View {
 			}
 		}
 		.sheet(isPresented: $isShowingQRCode) {
-			if let qrCodeImage = qrCodeImage {
-				QRCodeSheetView(image: qrCodeImage)
-			}
+            if let qrCodeImage = qrCodeImage {
+                QRCodeSheetView(image: qrCodeImage)
+            }
 		}
 	}
-
-	func connectWallet() {
+    
+    func connectWallet()  {
 		status = .connecting
+        
+        Task {
+            do {
+                switch try await accountManager.account.preferredConnectionMethod() {
+                case let .qrCode(image):
+                    qrCodeImage = image
+                    
+                    DispatchQueue.main.asyncAfter(deadline: .now() + .seconds(1)) {
+                        self.isShowingQRCode = true
+                    }
+                case let .redirect(url):
+                    await UIApplication.shared.open(url)
+                case let .manual(url):
+                    print("Open \(url) in mobile safari")
+                }
 
-		do {
-			switch try accountManager.account.preferredConnectionMethod() {
-			case let .qrCode(image):
-				qrCodeImage = image
+                Task {
+                    do {
+                        try await accountManager.account.connect()
 
-				DispatchQueue.main.asyncAfter(deadline: .now() + .seconds(1)) {
-					self.isShowingQRCode = true
-				}
-			case let .redirect(url):
-				UIApplication.shared.open(url)
-			case let .manual(url):
-				print("Open \(url) in mobile safari")
-			}
+                        for _ in 0 ... 90 {
+                            if accountManager.account.isConnected {
+                                
+                                let wallet = try PrivateKey.generate()
+                                let client = try await Client.create(account: wallet, options: .init(api: .init(env: .dev, isSecure: true, appVersion: "XMTPTest/v1.0.0")))
+                                
+                                // let client = try await Client.create(account: accountManager.account, options: .init(api: .init(env: .dev)))
 
-			Task {
-				do {
-					try await accountManager.account.connect()
+                                let keysData = try client.privateKeyBundle.serializedData()
+                                Persistence().saveKeys(keysData)
 
-					for _ in 0 ... 30 {
-						if accountManager.account.isConnected {
-							let client = try await Client.create(account: accountManager.account)
+                                self.status = .connected(client)
+                                self.isShowingQRCode = false
+                                return
+                            }
 
-							let keysData = try client.privateKeyBundle.serializedData()
-							Persistence().saveKeys(keysData)
+                            try await Task.sleep(for: .seconds(1))
+                        }
 
-							self.status = .connected(client)
-							self.isShowingQRCode = false
-							return
-						}
-
-						try await Task.sleep(for: .seconds(1))
-					}
-
-					self.status = .error("Timed out waiting to connect (30 seconds)")
-				} catch {
-					await MainActor.run {
-						self.status = .error("Error connecting: \(error)")
-						self.isShowingQRCode = false
-					}
-				}
-			}
-		} catch {
-			status = .error("No acceptable connection methods found \(error)")
-		}
+                        self.status = .error("Timed out waiting to connect (90 seconds)")
+                    } catch {
+                        await MainActor.run {
+                            self.status = .error("Error connecting: \(error)")
+                            self.isShowingQRCode = false
+                        }
+                    }
+                }
+            } catch {
+                await MainActor.run {
+                    self.status = .error("Error connecting: \(error)")
+                    self.isShowingQRCode = false
+                }
+            }
+        }
 	}
 
 	func generateWallet() {

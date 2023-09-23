@@ -6,7 +6,7 @@
 	<string>development</string>
 	<key>keychain-access-groups</key>
 	<array>
-		<string>$(AppIdentifierPrefix)com.xmtp.XMTPiOSExample</string>
+		<string>$(AppIdentifierPrefix)com.xmtp.vouch</string>
 	</array>
 </dict>
 </plist>

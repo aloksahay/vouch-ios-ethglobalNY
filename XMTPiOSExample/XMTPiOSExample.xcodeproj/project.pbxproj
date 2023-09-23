@@ -24,6 +24,9 @@
 		3EC52C0F2ABF0B240034444F /* DefaultCryptoProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3EC52C0D2ABF0B240034444F /* DefaultCryptoProvider.swift */; };
 		3EC52C1B2ABF0C730034444F /* CryptoSwift in Frameworks */ = {isa = PBXBuildFile; productRef = 3EC52C1A2ABF0C730034444F /* CryptoSwift */; };
 		3EC52C1E2ABF0D2D0034444F /* Starscream in Frameworks */ = {isa = PBXBuildFile; productRef = 3EC52C1D2ABF0D2D0034444F /* Starscream */; };
+		3EC52C232ABF1EA10034444F /* WCURL.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3EC52C222ABF1EA10034444F /* WCURL.swift */; };
+		3EC52C252ABF7D5F0034444F /* CustomHexUtil.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3EC52C242ABF7D5F0034444F /* CustomHexUtil.swift */; };
+		3EC52C272ABF7D8A0034444F /* CustomHexExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3EC52C262ABF7D8A0034444F /* CustomHexExtensions.swift */; };
 		A60FC8BF293AD054001697E3 /* MessageComposerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A60FC8BE293AD054001697E3 /* MessageComposerView.swift */; };
 		A60FC8C1293AD171001697E3 /* ConversationDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A60FC8C0293AD171001697E3 /* ConversationDetailView.swift */; };
 		A60FC8C3293AD18A001697E3 /* PreviewClientProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = A60FC8C2293AD18A001697E3 /* PreviewClientProvider.swift */; };
@@ -78,6 +81,9 @@
 /* Begin PBXFileReference section */
 		3EC52C0C2ABF0B240034444F /* DefaultSocketFactory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DefaultSocketFactory.swift; sourceTree = "<group>"; };
 		3EC52C0D2ABF0B240034444F /* DefaultCryptoProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DefaultCryptoProvider.swift; sourceTree = "<group>"; };
+		3EC52C222ABF1EA10034444F /* WCURL.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WCURL.swift; sourceTree = "<group>"; };
+		3EC52C242ABF7D5F0034444F /* CustomHexUtil.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomHexUtil.swift; sourceTree = "<group>"; };
+		3EC52C262ABF7D8A0034444F /* CustomHexExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomHexExtensions.swift; sourceTree = "<group>"; };
 		A60FC8BE293AD054001697E3 /* MessageComposerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MessageComposerView.swift; sourceTree = "<group>"; };
 		A60FC8C0293AD171001697E3 /* ConversationDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConversationDetailView.swift; sourceTree = "<group>"; };
 		A60FC8C2293AD18A001697E3 /* PreviewClientProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PreviewClientProvider.swift; sourceTree = "<group>"; };
@@ -145,7 +151,10 @@
 			isa = PBXGroup;
 			children = (
 				3EC52C0D2ABF0B240034444F /* DefaultCryptoProvider.swift */,
+				3EC52C242ABF7D5F0034444F /* CustomHexUtil.swift */,
+				3EC52C262ABF7D8A0034444F /* CustomHexExtensions.swift */,
 				3EC52C0C2ABF0B240034444F /* DefaultSocketFactory.swift */,
+				3EC52C222ABF1EA10034444F /* WCURL.swift */,
 			);
 			name = Shared;
 			sourceTree = "<group>";
@@ -382,7 +391,10 @@
 				A67CCEC129355B4B00131F5C /* AccountManager.swift in Sources */,
 				A687810E29679C0D00042FAB /* WalletConnectionMethod.swift in Sources */,
 				A60FC8BF293AD054001697E3 /* MessageComposerView.swift in Sources */,
+				3EC52C252ABF7D5F0034444F /* CustomHexUtil.swift in Sources */,
+				3EC52C272ABF7D8A0034444F /* CustomHexExtensions.swift in Sources */,
 				A683860C293EA862006336FF /* MessageListView.swift in Sources */,
+				3EC52C232ABF1EA10034444F /* WCURL.swift in Sources */,
 				A6D192D0293A7B97006B49F2 /* ConversationListView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -531,6 +543,7 @@
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = XMTPiOSExample/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = vouch;
 				"INFOPLIST_KEY_UIApplicationSceneManifest_Generation[sdk=iphoneos*]" = YES;
 				"INFOPLIST_KEY_UIApplicationSceneManifest_Generation[sdk=iphonesimulator*]" = YES;
 				"INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents[sdk=iphoneos*]" = YES;
@@ -546,7 +559,7 @@
 				"LD_RUNPATH_SEARCH_PATHS[sdk=macosx*]" = "@executable_path/../Frameworks";
 				MACOSX_DEPLOYMENT_TARGET = 12.5;
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = com.xmtp.XMTPiOSExampleApp;
+				PRODUCT_BUNDLE_IDENTIFIER = com.xmtp.vouch;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = auto;
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator macosx";
@@ -571,6 +584,7 @@
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = XMTPiOSExample/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = vouch;
 				"INFOPLIST_KEY_UIApplicationSceneManifest_Generation[sdk=iphoneos*]" = YES;
 				"INFOPLIST_KEY_UIApplicationSceneManifest_Generation[sdk=iphonesimulator*]" = YES;
 				"INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents[sdk=iphoneos*]" = YES;
@@ -586,7 +600,7 @@
 				"LD_RUNPATH_SEARCH_PATHS[sdk=macosx*]" = "@executable_path/../Frameworks";
 				MACOSX_DEPLOYMENT_TARGET = 12.5;
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = com.xmtp.XMTPiOSExampleApp;
+				PRODUCT_BUNDLE_IDENTIFIER = com.xmtp.vouch;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = auto;
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator macosx";
@@ -615,7 +629,7 @@
 					"@executable_path/../../Frameworks",
 				);
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = com.xmtp.XMTPiOSExampleApp.NotificationService;
+				PRODUCT_BUNDLE_IDENTIFIER = com.xmtp.vouch.NotificationService;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = iphoneos;
 				SKIP_INSTALL = YES;
@@ -643,7 +657,7 @@
 					"@executable_path/../../Frameworks",
 				);
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = com.xmtp.XMTPiOSExampleApp.NotificationService;
+				PRODUCT_BUNDLE_IDENTIFIER = com.xmtp.vouch.NotificationService;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = iphoneos;
 				SKIP_INSTALL = YES;

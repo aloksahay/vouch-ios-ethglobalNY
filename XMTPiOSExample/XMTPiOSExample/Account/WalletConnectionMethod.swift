@@ -7,6 +7,7 @@
 
 import CoreImage.CIFilterBuiltins
 import UIKit
+import WalletConnectUtils
 //import WalletConnectSwift
 
 protocol WalletConnectionMethod {
@@ -19,18 +20,18 @@ public enum WalletConnectionMethodType {
 }
 
 struct WalletRedirectConnectionMethod: WalletConnectionMethod {
-	var redirectURI: String
+	var redirectURI: WalletConnectURI
 	var type: WalletConnectionMethodType {
 		// swiftlint:disable force_unwrapping
-		.redirect(URL(string: redirectURI)!)
+        .redirect(URL(string: redirectURI.absoluteString)!)
 		// swiftlint:enable force_unwrapping
 	}
 }
 
 struct WalletQRCodeConnectionMethod: WalletConnectionMethod {
-	var redirectURI: String
+	var redirectURI: WalletConnectURI
 	var type: WalletConnectionMethodType {
-		let data = Data(redirectURI.utf8)
+        let data = Data(redirectURI.absoluteString.utf8)
 		let context = CIContext()
 		let filter = CIFilter.qrCodeGenerator()
 		filter.setValue(data, forKey: "inputMessage")
@@ -42,6 +43,8 @@ struct WalletQRCodeConnectionMethod: WalletConnectionMethod {
 		// swiftlint:enable force_unwrapping
 
 		let image = UIImage(cgImage: cgImage)
+        
+        print("YOOO URL", redirectURI.absoluteString)
 
 		return .qrCode(image)
 	}

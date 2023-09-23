@@ -31,8 +31,8 @@ public struct Account {
 		connection.walletAddress ?? ""
 	}
 
-	public func preferredConnectionMethod() throws -> WalletConnectionMethodType {
-		try connection.preferredConnectionMethod()
+    public func preferredConnectionMethod() async throws -> WalletConnectionMethodType {
+        try await connection.preferredConnectionMethod()
 	}
 
 	public func connect() async throws {
