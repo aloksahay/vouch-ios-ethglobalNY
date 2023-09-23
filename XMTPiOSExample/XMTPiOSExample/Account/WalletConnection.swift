@@ -94,7 +94,7 @@ class WCWalletConnection: WalletConnection {
 	}
 
     @MainActor func preferredConnectionMethod() async throws -> WalletConnectionMethodType {
-        
+                
         Networking.configure(projectId: "dda791cb05cfaa66cefbe9853f970659", socketFactory: DefaultSocketFactory(), socketConnectionType: .manual)
         try Networking.instance.connect()
         

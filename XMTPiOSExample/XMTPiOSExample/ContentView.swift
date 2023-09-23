@@ -28,7 +28,7 @@ struct ContentView: View {
 			switch status {
 			case .unknown:
 				Button("Connect Wallet", action: connectWallet)
-				Button("Generate Wallet", action: generateWallet)
+				Button("Let me in", action: generateWallet)
 			case .connecting:
 				ProgressView("Connecting…")
 			case let .connected(client):
@@ -79,7 +79,7 @@ struct ContentView: View {
                             if accountManager.account.isConnected {
                                 
                                 let wallet = try PrivateKey.generate()
-                                let client = try await Client.create(account: wallet, options: .init(api: .init(env: .dev, isSecure: true, appVersion: "XMTPTest/v1.0.0")))
+                                let client = try await Client.create(account: wallet, options: .init(api: .init(env: .production, isSecure: true, appVersion: "XMTPTest/v1.0.0")))
                                 
                                 // let client = try await Client.create(account: accountManager.account, options: .init(api: .init(env: .dev)))
 
