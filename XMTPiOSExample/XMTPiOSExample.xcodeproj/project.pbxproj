@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		5C6ABC8E2ABF2C0400184764 /* Apollo in Frameworks */ = {isa = PBXBuildFile; productRef = 5C6ABC8D2ABF2C0400184764 /* Apollo */; };
 		5DA91468EA97F25C911769EB /* Pods_XMTPiOSExample.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = EA9DF2A412351B14482E4044 /* Pods_XMTPiOSExample.framework */; };
 		6AEE396E29F330CD0027B657 /* secp256k1 in Frameworks */ = {isa = PBXBuildFile; productRef = 6AEE396D29F330CD0027B657 /* secp256k1 */; };
 		A60FC8BF293AD054001697E3 /* MessageComposerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A60FC8BE293AD054001697E3 /* MessageComposerView.swift */; };
@@ -101,6 +102,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				A65F0707297B5E7600C3C76E /* WalletConnectSwift in Frameworks */,
+				5C6ABC8E2ABF2C0400184764 /* Apollo in Frameworks */,
 				6AEE396E29F330CD0027B657 /* secp256k1 in Frameworks */,
 				A69F33C6292DC992005A5556 /* XMTP in Frameworks */,
 				A65F070A297B5E8600C3C76E /* KeychainAccess in Frameworks */,
@@ -129,7 +131,6 @@
 				4A15AF39AEAF811F8E9CB364 /* Pods-XMTPiOSExample.debug.xcconfig */,
 				B9DF2B40C27D0704A96D0A8B /* Pods-XMTPiOSExample.release.xcconfig */,
 			);
-			name = Pods;
 			path = Pods;
 			sourceTree = "<group>";
 		};
@@ -246,6 +247,7 @@
 				A65F0706297B5E7600C3C76E /* WalletConnectSwift */,
 				A65F0709297B5E8600C3C76E /* KeychainAccess */,
 				6AEE396D29F330CD0027B657 /* secp256k1 */,
+				5C6ABC8D2ABF2C0400184764 /* Apollo */,
 			);
 			productName = XMTPiOSExample;
 			productReference = A628198F292DC825004B9117 /* XMTPiOSExample.app */;
@@ -303,7 +305,8 @@
 			packageReferences = (
 				A65F0705297B5E7500C3C76E /* XCRemoteSwiftPackageReference "WalletConnectSwift" */,
 				A65F0708297B5E8600C3C76E /* XCRemoteSwiftPackageReference "KeychainAccess" */,
-				6AEE396C29F330CD0027B657 /* XCRemoteSwiftPackageReference "secp256k1.swift.git" */,
+				6AEE396C29F330CD0027B657 /* XCRemoteSwiftPackageReference "secp256k1.swift" */,
+				5C6ABC8C2ABF2C0400184764 /* XCRemoteSwiftPackageReference "apollo-ios" */,
 			);
 			productRefGroup = A6281990292DC825004B9117 /* Products */;
 			projectDirPath = "";
@@ -709,7 +712,15 @@
 /* End XCConfigurationList section */
 
 /* Begin XCRemoteSwiftPackageReference section */
-		6AEE396C29F330CD0027B657 /* XCRemoteSwiftPackageReference "secp256k1.swift.git" */ = {
+		5C6ABC8C2ABF2C0400184764 /* XCRemoteSwiftPackageReference "apollo-ios" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/apollographql/apollo-ios.git";
+			requirement = {
+				kind = upToNextMinorVersion;
+				minimumVersion = 1.5.0;
+			};
+		};
+		6AEE396C29F330CD0027B657 /* XCRemoteSwiftPackageReference "secp256k1.swift" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/GigaBitcoin/secp256k1.swift.git";
 			requirement = {
@@ -736,9 +747,14 @@
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
+		5C6ABC8D2ABF2C0400184764 /* Apollo */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 5C6ABC8C2ABF2C0400184764 /* XCRemoteSwiftPackageReference "apollo-ios" */;
+			productName = Apollo;
+		};
 		6AEE396D29F330CD0027B657 /* secp256k1 */ = {
 			isa = XCSwiftPackageProductDependency;
-			package = 6AEE396C29F330CD0027B657 /* XCRemoteSwiftPackageReference "secp256k1.swift.git" */;
+			package = 6AEE396C29F330CD0027B657 /* XCRemoteSwiftPackageReference "secp256k1.swift" */;
 			productName = secp256k1;
 		};
 		A65F0706297B5E7600C3C76E /* WalletConnectSwift */ = {
