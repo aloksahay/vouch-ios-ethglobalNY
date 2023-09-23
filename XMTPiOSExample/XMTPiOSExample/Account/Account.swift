@@ -42,7 +42,7 @@ public struct Account {
 
 extension Account: SigningKey {
 	public func sign(_ data: Data) async throws -> Signature {
-		let signatureData = try await connection.sign(data)
+        let signatureData = try await connection.sign(data)
 
 		var signature = Signature()
 

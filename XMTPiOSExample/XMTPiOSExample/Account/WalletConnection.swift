@@ -7,18 +7,23 @@
 
 import Foundation
 import UIKit
-import WalletConnectSwift
 import web3
 import XMTP
 import UIKit
+import Auth
+import WalletConnectRelay
+import WalletConnectNetworking
+import WalletConnectModal
+import WalletConnectSign
+import Combine
 
-extension WCURL {
-	var asURL: URL {
-		// swiftlint:disable force_unwrapping
-		URL(string: "wc://wc?uri=\(absoluteString)")!
-		// swiftlint:enable force_unwrapping
-	}
-}
+//extension WCURL {
+//	var asURL: URL {
+//		// swiftlint:disable force_unwrapping
+//		URL(string: "wc://wc?uri=\(absoluteString)")!
+//		// swiftlint:enable force_unwrapping
+//	}
+//}
 
 enum WalletConnectionError: String, Error {
 	case walletConnectURL
@@ -36,59 +41,84 @@ protocol WalletConnection {
 	func sign(_ data: Data) async throws -> Data
 }
 
-class WCWalletConnection: WalletConnection, WalletConnectSwift.ClientDelegate {
+class WCWalletConnection: WalletConnection {
 	@Published public var isConnected = false
+    
+//    var walletConnectClient: WalletConnectSwift.Client!
+//    var session: WalletConnectSwift.Session? {
 
-	var walletConnectClient: WalletConnectSwift.Client!
-	var session: WalletConnectSwift.Session? {
-		didSet {
-			DispatchQueue.main.async {
-				self.isConnected = self.session != nil
-			}
-		}
-	}
+    var session: Session?
+    private var publishers = Set<AnyCancellable>()
+//	var walletConnectClient: WalletConnectModalClient!
+//	var session: WCSession? {
+//		didSet {
+//			DispatchQueue.main.async {
+//				self.isConnected = self.session != nil
+//			}
+//		}
+//	}
 
 	init() {
-		let peerMeta = Session.ClientMeta(
-			name: "xmtp-ios",
-			description: "XMTP",
-			icons: [],
-			// swiftlint:disable force_unwrapping
-			url: URL(string: "https://safe.gnosis.io")!
-			// swiftlint:enable force_unwrapping
-		)
-		let dAppInfo = WalletConnectSwift.Session.DAppInfo(peerId: UUID().uuidString, peerMeta: peerMeta)
-
-		walletConnectClient = WalletConnectSwift.Client(delegate: self, dAppInfo: dAppInfo)
+            
+//        let peerMeta = Session.ClientMeta(
+//              name: "xmtp-ios",
+//              description: "XMTP",
+//              icons: [],
+//              // swiftlint:disable force_unwrapping
+//              url: URL(string: "https://safe.gnosis.io")!
+//              // swiftlint:enable force_unwrapping
+//        )
+//        let dAppInfo = WalletConnectSwift.Session.DAppInfo(peerId: UUID().uuidString, peerMeta: peerMeta)
+//
+//        walletConnectClient = WalletConnectSwift.Client(delegate: self, dAppInfo: dAppInfo)
+//
+        
+        Networking.configure(projectId: "dda791cb05cfaa66cefbe9853f970659", socketFactory: DefaultSocketFactory())
+        Auth.configure(crypto: DefaultCryptoProvider())
+        
+        let metadata = AppMetadata(
+            name: "xmtp-ios",
+            description: "XMTP",
+            url: "https://safe.gnosis.io",
+            icons: []
+        )
+        
+        WalletConnectModal.configure(
+            projectId: "dda791cb05cfaa66cefbe9853f970659",
+            metadata: metadata,
+            accentColor: .green
+        )
+        
 	}
 
 	@MainActor func preferredConnectionMethod() throws -> WalletConnectionMethodType {
-		guard let url = walletConnectURL?.asURL else {
-			throw WalletConnectionError.walletConnectURL
-		}
+//		guard let url = walletConnectURL?.asURL else {
+//			throw WalletConnectionError.walletConnectURL
+//		}
+//
+//		if UIApplication.shared.canOpenURL(url) {
+//			return WalletRedirectConnectionMethod(redirectURI: url.absoluteString).type
+//		}
 
-		if UIApplication.shared.canOpenURL(url) {
-			return WalletRedirectConnectionMethod(redirectURI: url.absoluteString).type
-		}
-
-		return WalletQRCodeConnectionMethod(redirectURI: url.absoluteString).type
+		return WalletQRCodeConnectionMethod(redirectURI: "").type
 	}
 
-	lazy var walletConnectURL: WCURL? = {
-		do {
-			let keybytes = try secureRandomBytes(count: 32)
-
-			return WCURL(
-				topic: UUID().uuidString,
-				// swiftlint:disable force_unwrapping
-				bridgeURL: URL(string: "https://bridge.walletconnect.org")!,
-				// swiftlint:enable force_unwrapping
-				key: keybytes.reduce("") { $0 + String(format: "%02x", $1) }
-			)
-		} catch {
-			return nil
-		}
-	}()
+//	lazy var walletConnectURL: WCURL? = {
+//		do {
+//			let keybytes = try secureRandomBytes(count: 32)
+//
+//			return WCURL(
+//				topic: UUID().uuidString,
+//				// swiftlint:disable force_unwrapping
+//				bridgeURL: URL(string: "wss://relay.walletconnect.com")!,
+//
+//				// swiftlint:enable force_unwrapping
+//				key: keybytes.reduce("") { $0 + String(format: "%02x", $1) }
+//			)
+//		} catch {
+//			return nil
+//		}
+//	}()
 
 	func secureRandomBytes(count: Int) throws -> Data {
 		var bytes = [UInt8](repeating: 0, count: count)
@@ -109,14 +139,47 @@ class WCWalletConnection: WalletConnection, WalletConnectSwift.ClientDelegate {
 	}
 
 	func connect() async throws {
-		guard let url = walletConnectURL else {
-			throw WalletConnectionError.walletConnectURL
-		}
+        
+        let metadata = AppMetadata(
+            name: "xmtp-ios",
+            description: "XMTP",
+            url: "https://safe.gnosis.io",
+            icons: []
+        )
+        
+        Pair.configure(metadata: metadata)
+        
+        Sign.instance.sessionDeletePublisher
+            .receive(on: DispatchQueue.main)
+            .sink { [unowned self] _ in
+                print("delete publisher")
+            }.store(in: &publishers)
 
-		try walletConnectClient.connect(to: url)
+        Sign.instance.sessionResponsePublisher
+            .receive(on: DispatchQueue.main)
+            .sink { [unowned self] response in
+                print("got response", response.chainId)
+            }.store(in: &publishers)
+        
+        if let session = Sign.instance.getSessions().first {
+            print("got session")
+        } else {
+            print("no session")
+        }
+        
+        
+        
+//		guard let url = walletConnectURL else {
+//			throw WalletConnectionError.walletConnectURL
+//		}
+//
+//		try walletConnectClient.connect(to: url)
 	}
 
 	func sign(_ data: Data) async throws -> Data {
+        
+        // sign it
+        
 		guard session != nil else {
 			throw WalletConnectionError.noSession
 		}
@@ -125,73 +188,75 @@ class WCWalletConnection: WalletConnection, WalletConnectSwift.ClientDelegate {
 			throw WalletConnectionError.noAddress
 		}
 
-		guard let url = walletConnectURL else {
-			throw WalletConnectionError.walletConnectURL
-		}
+//		guard let url = walletConnectURL else {
+//			throw WalletConnectionError.walletConnectURL
+//		}
 
 		guard let message = String(data: data, encoding: .utf8) else {
 			throw WalletConnectionError.invalidMessage
 		}
 
-		return try await withCheckedThrowingContinuation { continuation in
-			do {
-				try walletConnectClient.personal_sign(url: url, message: message, account: walletAddress) { response in
-					if let error = response.error {
-						continuation.resume(throwing: error)
-						return
-					}
-
-					do {
-						var resultString = try response.result(as: String.self)
-
-						// Strip leading 0x that we get back from `personal_sign`
-						if resultString.hasPrefix("0x"), resultString.count == 132 {
-							resultString = String(resultString.dropFirst(2))
-						}
-
-						guard let resultDataBytes = resultString.web3.bytesFromHex else {
-							continuation.resume(throwing: WalletConnectionError.noSignature)
-							return
-						}
-
-						var resultData = Data(resultDataBytes)
-
-						// Ensure we have a valid recovery byte
-						resultData[resultData.count - 1] = 1 - resultData[resultData.count - 1] % 2
-
-						continuation.resume(returning: resultData)
-					} catch {
-						continuation.resume(throwing: error)
-					}
-				}
-			} catch {
-				continuation.resume(throwing: error)
-			}
-		}
+//		return try await withCheckedThrowingContinuation { continuation in
+//			do {
+//				try walletConnectClient.personal_sign(url: url, message: message, account: walletAddress) { response in
+//					if let error = response.error {
+//						continuation.resume(throwing: error)
+//						return
+//					}
+//
+//					do {
+//						var resultString = try response.result(as: String.self)
+//
+//						// Strip leading 0x that we get back from `personal_sign`
+//						if resultString.hasPrefix("0x"), resultString.count == 132 {
+//							resultString = String(resultString.dropFirst(2))
+//						}
+//
+//						guard let resultDataBytes = resultString.web3.bytesFromHex else {
+//							continuation.resume(throwing: WalletConnectionError.noSignature)
+//							return
+//						}
+//
+//						var resultData = Data(resultDataBytes)
+//
+//						// Ensure we have a valid recovery byte
+//						resultData[resultData.count - 1] = 1 - resultData[resultData.count - 1] % 2
+//
+//						continuation.resume(returning: resultData)
+//					} catch {
+//						continuation.resume(throwing: error)
+//					}
+//				}
+//			} catch {
+//				continuation.resume(throwing: error)
+//			}
+//		}
+        
+        return Data()
 	}
 
 	var walletAddress: String? {
-		if let address = session?.walletInfo?.accounts.first {
-			return EthereumAddress(address).toChecksumAddress()
+        if let address = session?.namespaces.first?.value.accounts.first?.absoluteString {
+            return EthereumAddress(address).toChecksumAddress()
 		}
 
 		return nil
 	}
 
-	func client(_: WalletConnectSwift.Client, didConnect _: WalletConnectSwift.WCURL) {}
-
-	func client(_: WalletConnectSwift.Client, didFailToConnect _: WalletConnectSwift.WCURL) {}
-
-	func client(_: WalletConnectSwift.Client, didConnect session: WalletConnectSwift.Session) {
-		// TODO: Cache session
-		self.session = session
-	}
-
-	func client(_: WalletConnectSwift.Client, didUpdate session: WalletConnectSwift.Session) {
-		self.session = session
-	}
-
-	func client(_: WalletConnectSwift.Client, didDisconnect _: WalletConnectSwift.Session) {
-		session = nil
-	}
+//	func client(_: WalletConnectSwift.Client, didConnect _: WalletConnectSwift.WCURL) {}
+//
+//	func client(_: WalletConnectSwift.Client, didFailToConnect _: WalletConnectSwift.WCURL) {}
+//
+//	func client(_: WalletConnectSwift.Client, didConnect session: Session) {
+//		// TODO: Cache session
+//		self.session = session
+//	}
+//
+//	func client(_: WalletConnectSwift.Client, didUpdate session: Session) {
+//		self.session = session
+//	}
+//
+//	func client(_: WalletConnectSwift.Client, didDisconnect _: Session) {
+//		session = nil
+//	}
 }

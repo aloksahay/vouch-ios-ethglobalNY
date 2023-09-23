@@ -7,7 +7,7 @@
 
 import CoreImage.CIFilterBuiltins
 import UIKit
-import WalletConnectSwift
+//import WalletConnectSwift
 
 protocol WalletConnectionMethod {
 	var type: WalletConnectionMethodType { get }
