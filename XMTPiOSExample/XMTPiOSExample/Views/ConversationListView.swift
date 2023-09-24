@@ -19,16 +19,52 @@ struct ConversationListView: View {
         // Set the background color here
         NavigationView {
             ZStack {
-                Color(hex: "F4DAC7").ignoresSafeArea()
-                VStack {
-                    List {
-                        ForEach(conversations, id: \.peerAddress) { conversation in
-                            NavigationLink(value: conversation) {
-                                Text(conversation.peerAddress)
+                Color(hex: "F4DAC7").ignoresSafeArea() // Set the background color of the view
+
+                List {
+                    ForEach(conversations, id: \.peerAddress) { conversation in
+                        NavigationLink(value: conversation) {
+                            HStack {
+                                // Circular Image View
+                                Image(uiImage: UIImage(named: "sample_avatar")!)
+                                    .resizable()
+                                    .frame(width: 40, height: 40)
+                                    .clipShape(Circle())
+                                    .foregroundColor(.white)
+
+                                // Peer Address and Last Message
+                                VStack(alignment: .leading) {
+                                    HStack {
+                                        Text(shortenStringToEllipsis(conversation.peerAddress, characterCount: 10))
+                                            .font(.headline)
+                                        
+                                        // if conversation.isActiveOnEns {
+                                        Image(uiImage: UIImage(named: "ens_icon")!)
+                                            .resizable()
+                                            .frame(width: 20, height: 20)
+                                        //}
+                                        //if conversation.isActiveOnApe {
+                                        Image(uiImage: UIImage(named: "ape_icon")!)
+                                            .resizable()
+                                            .frame(width: 20, height: 20)
+                                        //}
+                                        //if conversation.isActiveOnFarcaster {
+                                        Image(uiImage: UIImage(named: "farcaster_icon")!)
+                                            .resizable()
+                                            .frame(width: 20, height: 20)
+                                        //}
+                                    }
+                                    
+                                    Text("Hi there, fancy meeting at the coffee place? ")
+                                        .font(.subheadline)
+                                }
                             }
+                            .background(Color.clear) // Make the cell background clear
                         }
+                        .listRowBackground(Color.clear) // Make the row background clear
                     }
                 }
+                .listStyle(PlainListStyle()) // Set the list style to PlainListStyle
             }
         }
 		.navigationDestination(for: Conversation.self) { conversation in
@@ -60,6 +96,7 @@ struct ConversationListView: View {
 				}) {
 					Label("New Conversation", systemImage: "plus")
 				}
+                .tint(Color(hex: "F68633"))
 			}
 		}
 		.sheet(isPresented: $isShowingNewConversation) {
@@ -100,6 +137,21 @@ struct ConversationListView: View {
 			}
 		}
 	}
+    
+    func shortenStringToEllipsis(_ input: String, characterCount: Int) -> String {
+        guard input.count > (characterCount + 3) else {
+            return input
+        }
+
+        let prefixLength = (characterCount - 1) / 2
+        let suffixLength = characterCount - prefixLength - 3
+
+        let prefix = String(input.prefix(prefixLength))
+        let suffix = String(input.suffix(suffixLength))
+
+        return "\(prefix)...\(suffix)"
+    }
+
 }
 
 struct ConversationListView_Previews: PreviewProvider {
