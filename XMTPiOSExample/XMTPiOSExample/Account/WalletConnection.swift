@@ -101,8 +101,8 @@ class WCWalletConnection: WalletConnection {
         Auth.configure(crypto: DefaultCryptoProvider())
         
         let metadata = AppMetadata(
-            name: "xmtp-ios",
-            description: "XMTP",
+            name: "vouch-ios",
+            description: "Vouch iOS",
             url: "https://safe.gnosis.io",
             icons: []
         )
