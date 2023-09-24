@@ -8,44 +8,43 @@ struct ConversationDetailView: View {
 	@State private var messages: [DecodedMessage] = []
 
 	var body: some View {
-		VStack {
-            
+        VStack {
             Image(uiImage: UIImage(named: "sample_avatar")!)
                 .resizable()
                 .frame(width: 100, height: 100)
                 .clipShape(Circle())
                 .foregroundColor(.white)
-                
-			MessageListView(myAddress: client.address, messages: messages)
-				.refreshable {
-					await loadMessages()
-				}
-				.task {
-					await loadMessages()
-				}
-				.task {
-					do {
-						for try await message in conversation.streamMessages() {
-							await MainActor.run {
-								messages.append(message)
-							}
-						}
-					} catch {
-						print("Error in message stream: \(error)")
-					}
-				}
-
-			MessageComposerView { text in
-				do {
-					try await conversation.send(text: text)
-				} catch {
-					print("Error sending message: \(error)")
-				}
-			}
-		}
-        .background(Color(hex: "F4DAC7").ignoresSafeArea())
+            
+            MessageListView(myAddress: client.address, messages: messages)
+                .refreshable {
+                    await loadMessages()
+                }
+                .task {
+                    await loadMessages()
+                }
+                .task {
+                    do {
+                        for try await message in conversation.streamMessages() {
+                            await MainActor.run {
+                                messages.append(message)
+                            }
+                        }
+                    } catch {
+                        print("Error in message stream: \(error)")
+                    }
+                }
+            
+            MessageComposerView { text in
+                do {
+                    try await conversation.send(text: text)
+                } catch {
+                    print("Error sending message: \(error)")
+                }
+            }
+        }
+        .background(Color.black.ignoresSafeArea())
         .navigationTitle(shortenStringToEllipsis(conversation.peerAddress, characterCount: 10))
-		.navigationBarTitleDisplayMode(.inline)
+        .navigationBarTitleDisplayMode(.inline)
         .toolbar {
             ToolbarItem(placement: .navigationBarTrailing) {
                 // Add your icons here
@@ -79,6 +78,7 @@ struct ConversationDetailView: View {
                         .frame(width: 20, height: 20)
                 }.padding(.trailing, -8)
             }
+            
         }
 	}
 

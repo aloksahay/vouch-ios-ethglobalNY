@@ -12,7 +12,7 @@ struct ConversationListView: View {
         // Set the background color here
         NavigationView {
             ZStack {
-                Color(hex: "F4DAC7").ignoresSafeArea() // Set the background color of the view
+                Color.black.ignoresSafeArea() // Set the background color of the view
                 List {
                     ForEach(conversations, id: \.peerAddress) { conversation in
                         NavigationLink(value: conversation) {
@@ -51,9 +51,9 @@ struct ConversationListView: View {
                                         .font(.subheadline)
                                 }
                             }
-                            .background(Color.clear) // Make the cell background clear
+                            .background(Color.white) // Make the cell background clear
                         }
-                        .listRowBackground(Color.clear) // Make the row background clear
+                        .listRowBackground(Color.white) // Make the row background clear
                     }
                 }
                 .listStyle(PlainListStyle()) // Set the list style to PlainListStyle
@@ -62,7 +62,15 @@ struct ConversationListView: View {
 		.navigationDestination(for: Conversation.self) { conversation in
 			ConversationDetailView(client: client, conversation: conversation)
 		}
-		.navigationTitle("Chats")
+        .navigationBarTitle("Chats", displayMode: .inline)
+                   .background(NavigationConfigurator { nc in
+                       nc.navigationBar.barTintColor = .blue
+                       nc.navigationBar.titleTextAttributes = [.foregroundColor : UIColor.white]
+                   })
+        .onAppear {
+            UINavigationBar.appearance().titleTextAttributes = [.foregroundColor: UIColor.white]
+        }
+        .tint(Color.white)
 		.refreshable {
 			await loadConversations()
 		}
@@ -88,7 +96,7 @@ struct ConversationListView: View {
 				}) {
 					Label("New Conversation", systemImage: "plus")
 				}
-                .tint(Color(hex: "F68633"))
+                .tint(Color.white)
 			}
 		}
 		.sheet(isPresented: $isShowingNewConversation) {
@@ -156,4 +164,18 @@ struct ConversationListView_Previews: PreviewProvider {
 			}
 		}
 	}
+}
+
+struct NavigationConfigurator: UIViewControllerRepresentable {
+    var configure: (UINavigationController) -> Void = { _ in }
+
+    func makeUIViewController(context: UIViewControllerRepresentableContext<NavigationConfigurator>) -> UIViewController {
+        UIViewController()
+    }
+    func updateUIViewController(_ uiViewController: UIViewController, context: UIViewControllerRepresentableContext<NavigationConfigurator>) {
+        if let nc = uiViewController.navigationController {
+            self.configure(nc)
+        }
+    }
+
 }
