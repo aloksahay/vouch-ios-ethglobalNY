@@ -40,9 +40,12 @@ struct XMTPiOSExampleApp: App {
 	@UIApplicationDelegateAdaptor private var appDelegate: AppDelegate
 
 	var body: some Scene {
-		WindowGroup {
-			ContentView()
-                .background(Color.black)
-		}
+        WindowGroup {
+            ContentView()
+                .onAppear {
+                    // Set the global appearance for all navigation bars
+                    UINavigationBar.appearance().standardAppearance = .custom
+                }
+        }
 	}
 }
