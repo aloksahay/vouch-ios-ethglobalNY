@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		3E7CC4652AC0374200F13A5E /* NavHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E7CC4642AC0374200F13A5E /* NavHelper.swift */; };
 		3EC52BF02ABF09420034444F /* WalletConnect in Frameworks */ = {isa = PBXBuildFile; productRef = 3EC52BEF2ABF09420034444F /* WalletConnect */; };
 		3EC52BF22ABF09420034444F /* WalletConnectAuth in Frameworks */ = {isa = PBXBuildFile; productRef = 3EC52BF12ABF09420034444F /* WalletConnectAuth */; };
 		3EC52BF42ABF09420034444F /* WalletConnectChat in Frameworks */ = {isa = PBXBuildFile; productRef = 3EC52BF32ABF09420034444F /* WalletConnectChat */; };
@@ -83,6 +84,7 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		3E7CC4642AC0374200F13A5E /* NavHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NavHelper.swift; sourceTree = "<group>"; };
 		3EC52C0C2ABF0B240034444F /* DefaultSocketFactory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DefaultSocketFactory.swift; sourceTree = "<group>"; };
 		3EC52C0D2ABF0B240034444F /* DefaultCryptoProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DefaultCryptoProvider.swift; sourceTree = "<group>"; };
 		3EC52C222ABF1EA10034444F /* WCURL.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WCURL.swift; sourceTree = "<group>"; };
@@ -160,6 +162,7 @@
 			children = (
 				5C9A024D2ABFD43B009C3B1B /* API */,
 				3EC52C0D2ABF0B240034444F /* DefaultCryptoProvider.swift */,
+				3E7CC4642AC0374200F13A5E /* NavHelper.swift */,
 				3EC52C242ABF7D5F0034444F /* CustomHexUtil.swift */,
 				3EC52C262ABF7D8A0034444F /* CustomHexExtensions.swift */,
 				3EC52C0C2ABF0B240034444F /* DefaultSocketFactory.swift */,
@@ -411,6 +414,7 @@
 				A687810C29679BFC00042FAB /* WalletConnection.swift in Sources */,
 				A69F33CA292DD557005A5556 /* LoggedInView.swift in Sources */,
 				A69F33CC292DD568005A5556 /* QRCodeSheetView.swift in Sources */,
+				3E7CC4652AC0374200F13A5E /* NavHelper.swift in Sources */,
 				A6281993292DC825004B9117 /* XMTPiOSExampleApp.swift in Sources */,
 				A67CCEC129355B4B00131F5C /* AccountManager.swift in Sources */,
 				A687810E29679C0D00042FAB /* WalletConnectionMethod.swift in Sources */,

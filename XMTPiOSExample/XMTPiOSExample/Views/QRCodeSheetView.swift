@@ -12,12 +12,12 @@ struct QRCodeSheetView: View {
 
     var body: some View {
         ZStack {
-            Color(hex: "F4DAC7")
+            Color.black
 
             VStack {
                 Text("Scan the below QR code to get started and to connect your wallet with our network")
                     .font(.headline)
-                    .foregroundColor(.black)
+                    .foregroundColor(.white)
                     .padding(.top, 20)
                 
                 Image(uiImage: UIImage(named: "qrimage")!)

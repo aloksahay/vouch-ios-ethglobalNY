@@ -49,7 +49,7 @@ struct MessageCellView: View {
 		if message.senderAddress == myAddress {
 			return .purple
 		} else {
-			return .secondary.opacity(0.2)
+			return .yellow.opacity(1)
 		}
 	}
 

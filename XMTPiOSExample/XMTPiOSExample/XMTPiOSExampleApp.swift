@@ -12,6 +12,8 @@ class AppDelegate: NSObject, UIApplicationDelegate {
 	func application(_: UIApplication, didFinishLaunchingWithOptions _: [UIApplication.LaunchOptionsKey: Any]? = nil) -> Bool {
 		// Change this to the URL of where your https://github.com/xmtp/example-notification-server-go is hosted
 		XMTPPush.shared.setPushServer("YOUR PUSH SERVER HERE")
+        
+        UINavigationBar.appearance().titleTextAttributes = [NSAttributedString.Key.foregroundColor: UIColor.white]
 
 		return true
 	}
@@ -38,9 +40,12 @@ struct XMTPiOSExampleApp: App {
 	@UIApplicationDelegateAdaptor private var appDelegate: AppDelegate
 
 	var body: some Scene {
-		WindowGroup {
-			ContentView()
-                .background(Color.black)
-		}
+        WindowGroup {
+            ContentView()
+                .onAppear {
+                    // Set the global appearance for all navigation bars
+                    UINavigationBar.appearance().standardAppearance = .custom
+                }
+        }
 	}
 }
