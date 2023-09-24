@@ -179,6 +179,7 @@ class WCWalletConnection: WalletConnection {
             .sink { sessions in
                 let method = "personal_sign"
                 let walletAddress = sessions.accounts.first?.address
+                print("got wallet address", walletAddress)
                 let requestParams = AnyCodable(["0x4d7920656d61696c206973206a6f686e40646f652e636f6d202d2031363533333933373535313531", walletAddress])
                 let request = Request(topic: sessions.topic, method: method, params: requestParams, chainId: Blockchain("eip155:1")!)
                 Task {
@@ -195,8 +196,6 @@ class WCWalletConnection: WalletConnection {
         Sign.instance.sessionResponsePublisher
             .receive(on: DispatchQueue.main)
             .sink { [unowned self] response in
-                print("got response", response.chainId)
-                
                 do {
                     let resultJSON = try response.result.value.asJSONEncodedString()
                     signResponse = resultJSON.replacingOccurrences(of: "\"", with: "").replacingOccurrences(of: "\\", with: "")

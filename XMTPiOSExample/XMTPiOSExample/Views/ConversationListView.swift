@@ -5,7 +5,7 @@ struct ConversationListView: View {
 	var client: XMTP.Client
 
 	@EnvironmentObject var coordinator: EnvironmentCoordinator
-	@State private var conversations: [XMTP.Conversation] = []
+	@State private var conversations: [ConversationInfo] = []
 	@State private var isShowingNewConversation = false
 
 	var body: some View {
@@ -14,8 +14,8 @@ struct ConversationListView: View {
             ZStack {
                 Color.black.ignoresSafeArea() // Set the background color of the view
                 List {
-                    ForEach(conversations, id: \.peerAddress) { conversation in
-                        NavigationLink(value: conversation) {
+                    ForEach(conversations, id: \.conversation.peerAddress) { conversationInfo in
+                        NavigationLink(value: conversationInfo.conversation) {
                             HStack {
                                 // Circular Image View
                                 Image(uiImage: UIImage(named: "sample_avatar")!)
@@ -27,7 +27,7 @@ struct ConversationListView: View {
                                 // Peer Address and Last Message
                                 VStack(alignment: .leading) {
                                     HStack {
-                                        Text(shortenStringToEllipsis(conversation.peerAddress, characterCount: 10))
+                                        Text(shortenStringToEllipsis(conversationInfo.conversation.peerAddress, characterCount: 10))
                                             .font(.headline)
                                         
                                         // if conversation.isActiveOnEns {
@@ -47,8 +47,16 @@ struct ConversationListView: View {
                                         //}
                                     }
                                     
-                                    Text("Hi there, fancy meeting at the coffee place? ")
-                                        .font(.subheadline)
+                                    if let message = conversationInfo.latestMessage {
+                                        
+                                        Text(truncateStringTo40Characters(message)) // Display the latest message
+                                            .font(.subheadline)
+                                    
+                                    } else {
+                                        Text("No messages yet")
+                                            .font(.subheadline)
+                                    }
+                                    
                                 }
                             }
                             .background(Color.white) // Make the cell background clear
@@ -79,9 +87,26 @@ struct ConversationListView: View {
 		}
 		.task {
 			do {
-				for try await conversation in await client.conversations.stream() {
-					conversations.insert(conversation, at: 0)
-
+                for try await conversation in await client.conversations.stream() {
+                        
+                    let latestMessage = await fetchLatestMessage(for: conversation)
+                    
+                    if let message = latestMessage as? DecodedMessage {
+                        
+                        var bodyText: String {
+                            // swiftlint:disable force_try
+                            return try! message.content()
+                            // swiftlint:enable force_try
+                        }
+                        
+                        let content = bodyText
+                        let conversationInfo = ConversationInfo(conversation: conversation, latestMessage: content)
+                        conversations.insert(conversationInfo, at: 0)
+                    } else {
+                        let conversationInfo = ConversationInfo(conversation: conversation, latestMessage: "")
+                        conversations.insert(conversationInfo, at: 0)
+                    }
+        
 					await add(conversations: [conversation])
 				}
 
@@ -101,7 +126,10 @@ struct ConversationListView: View {
 		}
 		.sheet(isPresented: $isShowingNewConversation) {
 			NewConversationView(client: client) { conversation in
-				conversations.insert(conversation, at: 0)
+                                
+                let conversationInfo = ConversationInfo(conversation: conversation, latestMessage: "")
+                conversations.insert(conversationInfo, at: 0)
+                
 				coordinator.path.append(conversation)
 			}
 		}
@@ -110,9 +138,36 @@ struct ConversationListView: View {
 	func loadConversations() async {
 		do {
 			let conversations = try await client.conversations.list()
-
+            
+            var conversationInfoArray: [ConversationInfo] = []
+            
+            for conversation in conversations {
+                // Fetch the latest message for each conversation
+                let latestMessage = await fetchLatestMessage(for: conversation)
+                
+                
+                
+                if let message = latestMessage as? DecodedMessage {
+                    
+                    var bodyText: String {
+                        // swiftlint:disable force_try
+                        return try! message.content()
+                        // swiftlint:enable force_try
+                    }
+                    
+                    let content = bodyText
+                    let conversationInfo = ConversationInfo(conversation: conversation, latestMessage: content)
+                    conversationInfoArray.append(conversationInfo)
+                } else {
+                    let conversationInfo = ConversationInfo(conversation: conversation, latestMessage: "")
+                    conversationInfoArray.append(conversationInfo)
+                }
+            
+                
+            }
+            
 			await MainActor.run {
-				self.conversations = conversations
+				self.conversations = conversationInfoArray
 			}
 
 			await add(conversations: conversations)
@@ -120,6 +175,26 @@ struct ConversationListView: View {
 			print("Error loading conversations: \(error)")
 		}
 	}
+    
+    func fetchLatestMessage(for conversation: XMTP.Conversation) async -> XMTP.DecodedMessage? {
+        do {
+            // Fetch the latest message for the conversation
+            let messages = try await conversation.messages()
+            return messages.first
+        } catch {
+            print("Error fetching latest message for conversation: \(error)")
+            return nil
+        }
+    }
+    
+    func truncateStringTo40Characters(_ input: String) -> String {
+        if input.count <= 40 {
+            return input
+        } else {
+            let truncated = input.prefix(20)
+            return String(truncated)
+        }
+    }
 
 	func add(conversations: [Conversation]) async {
 		// Ensure we're subscribed to push notifications on these conversations
@@ -178,4 +253,9 @@ struct NavigationConfigurator: UIViewControllerRepresentable {
         }
     }
 
+}
+
+struct ConversationInfo {
+    var conversation: XMTP.Conversation
+    var latestMessage: String
 }
