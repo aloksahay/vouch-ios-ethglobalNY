@@ -214,6 +214,10 @@ struct ConversationListView: View {
 	}
     
     func shortenStringToEllipsis(_ input: String, characterCount: Int) -> String {
+        if input == "0xF8cd371Ae43e1A6a9bafBB4FD48707607D24aE43" {
+            return "nickmolnar.eth"
+        }
+        
         guard input.count > (characterCount + 3) else {
             return input
         }
