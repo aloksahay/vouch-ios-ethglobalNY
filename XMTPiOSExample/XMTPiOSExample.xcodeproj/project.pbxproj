@@ -27,6 +27,8 @@
 		3EC52C232ABF1EA10034444F /* WCURL.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3EC52C222ABF1EA10034444F /* WCURL.swift */; };
 		3EC52C252ABF7D5F0034444F /* CustomHexUtil.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3EC52C242ABF7D5F0034444F /* CustomHexUtil.swift */; };
 		3EC52C272ABF7D8A0034444F /* CustomHexExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3EC52C262ABF7D8A0034444F /* CustomHexExtensions.swift */; };
+		5C9A02542ABFD540009C3B1B /* ApiManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C9A02522ABFD540009C3B1B /* ApiManager.swift */; };
+		5C9A02552ABFD540009C3B1B /* Profile.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C9A02532ABFD540009C3B1B /* Profile.swift */; };
 		A60FC8BF293AD054001697E3 /* MessageComposerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A60FC8BE293AD054001697E3 /* MessageComposerView.swift */; };
 		A60FC8C1293AD171001697E3 /* ConversationDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A60FC8C0293AD171001697E3 /* ConversationDetailView.swift */; };
 		A60FC8C3293AD18A001697E3 /* PreviewClientProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = A60FC8C2293AD18A001697E3 /* PreviewClientProvider.swift */; };
@@ -84,6 +86,8 @@
 		3EC52C222ABF1EA10034444F /* WCURL.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WCURL.swift; sourceTree = "<group>"; };
 		3EC52C242ABF7D5F0034444F /* CustomHexUtil.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomHexUtil.swift; sourceTree = "<group>"; };
 		3EC52C262ABF7D8A0034444F /* CustomHexExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomHexExtensions.swift; sourceTree = "<group>"; };
+		5C9A02522ABFD540009C3B1B /* ApiManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ApiManager.swift; sourceTree = "<group>"; };
+		5C9A02532ABFD540009C3B1B /* Profile.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Profile.swift; sourceTree = "<group>"; };
 		A60FC8BE293AD054001697E3 /* MessageComposerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MessageComposerView.swift; sourceTree = "<group>"; };
 		A60FC8C0293AD171001697E3 /* ConversationDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConversationDetailView.swift; sourceTree = "<group>"; };
 		A60FC8C2293AD18A001697E3 /* PreviewClientProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PreviewClientProvider.swift; sourceTree = "<group>"; };
@@ -150,6 +154,7 @@
 		3EC52C122ABF0B380034444F /* Shared */ = {
 			isa = PBXGroup;
 			children = (
+				5C9A024D2ABFD43B009C3B1B /* API */,
 				3EC52C0D2ABF0B240034444F /* DefaultCryptoProvider.swift */,
 				3EC52C242ABF7D5F0034444F /* CustomHexUtil.swift */,
 				3EC52C262ABF7D8A0034444F /* CustomHexExtensions.swift */,
@@ -157,6 +162,15 @@
 				3EC52C222ABF1EA10034444F /* WCURL.swift */,
 			);
 			name = Shared;
+			sourceTree = "<group>";
+		};
+		5C9A024D2ABFD43B009C3B1B /* API */ = {
+			isa = PBXGroup;
+			children = (
+				5C9A02522ABFD540009C3B1B /* ApiManager.swift */,
+				5C9A02532ABFD540009C3B1B /* Profile.swift */,
+			);
+			name = API;
 			sourceTree = "<group>";
 		};
 		A6281986292DC825004B9117 = {
@@ -378,9 +392,11 @@
 				3EC52C0E2ABF0B240034444F /* DefaultSocketFactory.swift in Sources */,
 				3EC52C0F2ABF0B240034444F /* DefaultCryptoProvider.swift in Sources */,
 				A6557A3329411F4F00CC4C7B /* NewConversationView.swift in Sources */,
+				5C9A02552ABFD540009C3B1B /* Profile.swift in Sources */,
 				A65F0704297B5D4E00C3C76E /* Persistence.swift in Sources */,
 				A687810729679BC700042FAB /* Account.swift in Sources */,
 				A6557A312941166E00CC4C7B /* MessageCellView.swift in Sources */,
+				5C9A02542ABFD540009C3B1B /* ApiManager.swift in Sources */,
 				A60FC8C1293AD171001697E3 /* ConversationDetailView.swift in Sources */,
 				A60FC8C3293AD18A001697E3 /* PreviewClientProvider.swift in Sources */,
 				A6281995292DC825004B9117 /* ContentView.swift in Sources */,
