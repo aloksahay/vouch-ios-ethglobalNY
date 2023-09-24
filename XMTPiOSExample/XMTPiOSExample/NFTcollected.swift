@@ -31,25 +31,3 @@ struct Collection: Decodable {
         case image_uri = "image_uri"
     }
 }
-
-// Convert JSON data to Data
-//if let jsonData = json.data(using: .utf8) {
-//    do {
-//        // Decode JSON data into CollectionData
-//        let collectionData = try JSONDecoder().decode(CollectionData.self, from: jsonData)
-//
-//        // Access the collections
-//        let collections = collectionData.data.collections
-//
-//        for collection in collections {
-//            print("Collection Name: \(collection.name)")
-//            print("Contract Address: \(collection.contract_address)")
-//            print("Number of Tokens: \(collection.total)")
-//            print("Image URI: \(collection.image_uri)") // Print the image URI
-//            print("\n")
-//        }
-//    } catch {
-//        print("Error decoding JSON: \(error)")
-//    }
-//}
-
