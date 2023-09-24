@@ -15,10 +15,10 @@ struct LoggedInView: View {
 			VStack {
 				ConversationListView(client: client)
 				VStack(alignment: .leading) {
-					Text("Connected to **\(client.environment.rawValue)** as")
-					Text("`\(client.address)`")
-						.bold()
-						.textSelection(.enabled)
+//					Text("Connected to **\(client.environment.rawValue)** as")
+//					Text("`\(client.address)`")
+//						.bold()
+//						.textSelection(.enabled)
 				}
 				.frame(maxWidth: .infinity)
 				.font(.caption)
