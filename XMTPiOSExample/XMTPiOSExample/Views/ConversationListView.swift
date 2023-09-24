@@ -191,7 +191,7 @@ struct ConversationListView: View {
         if input.count <= 40 {
             return input
         } else {
-            let truncated = input.prefix(20)
+            let truncated = input.prefix(40)
             return String(truncated)
         }
     }
