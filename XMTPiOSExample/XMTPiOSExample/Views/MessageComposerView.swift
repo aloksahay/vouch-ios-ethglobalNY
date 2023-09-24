@@ -23,6 +23,7 @@ struct MessageComposerView: View {
 				.onAppear {
 					self.isFocused = true
 				}
+                .padding(EdgeInsets(top: 0, leading: 10, bottom: 0, trailing: 5))
 			Button(action: send) {
 				Label("Send", systemImage: "arrow.up.circle.fill")
 					.font(.title)

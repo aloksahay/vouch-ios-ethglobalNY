@@ -29,8 +29,28 @@ struct ContentView: View {
             VStack {
                 switch status {
                 case .unknown:
-                    Button("Connect Wallet", action: connectWallet)
+                    Spacer()
+                    Text("Welcome to Vouch")
+                        .font(.title)
+                        .foregroundColor(.black)
+                        .multilineTextAlignment(.center)
+                    Text("We vouch for you, we've got your back to protect you from the dark side of social.")
+                        .font(.subheadline)
+                        .foregroundColor(.gray)
+                        .multilineTextAlignment(.center)
+                        .padding(.top, 20)
+                    Button(action: connectWallet) {
+                        Text("Connect Wallet")
+                            .font(.headline)
+                            .foregroundColor(.white)
+                            .frame(maxWidth: .infinity)
+                            .padding()
+                            .background(Color(hex: "F68633"))
+                            .cornerRadius(30)
+                    }
+                    .padding(.top, 20)
                     Button("Let me in", action: generateWallet)
+                        .padding(EdgeInsets.init(top: 20, leading: 0, bottom: 0, trailing: 0))
                 case .connecting:
                     ProgressView("Connecting…")
                 case let .connected(client):
@@ -49,9 +69,7 @@ struct ContentView: View {
                 }
             }
             .sheet(isPresented: $isShowingQRCode) {
-                if let qrCodeImage = qrCodeImage {
-                    QRCodeSheetView(image: qrCodeImage)
-                }
+                QRCodeSheetView(image: qrCodeImage)
             }
         }
 	}
