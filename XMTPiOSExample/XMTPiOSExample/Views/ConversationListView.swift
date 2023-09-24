@@ -16,17 +16,25 @@ struct ConversationListView: View {
 	@State private var isShowingNewConversation = false
 
 	var body: some View {
-		List {
-			ForEach(conversations, id: \.peerAddress) { conversation in
-				NavigationLink(value: conversation) {
-					Text(conversation.peerAddress)
-				}
-			}
-		}
+        // Set the background color here
+        NavigationView {
+            ZStack {
+                Color(hex: "F4DAC7").ignoresSafeArea()
+                VStack {
+                    List {
+                        ForEach(conversations, id: \.peerAddress) { conversation in
+                            NavigationLink(value: conversation) {
+                                Text(conversation.peerAddress)
+                            }
+                        }
+                    }
+                }
+            }
+        }
 		.navigationDestination(for: Conversation.self) { conversation in
 			ConversationDetailView(client: client, conversation: conversation)
 		}
-		.navigationTitle("Conversations")
+		.navigationTitle("Chats")
 		.refreshable {
 			await loadConversations()
 		}

@@ -43,7 +43,8 @@ struct ConversationDetailView: View {
 				}
 			}
 		}
-		.navigationTitle(conversation.peerAddress)
+        .background(Color(hex: "F4DAC7").ignoresSafeArea())
+		.navigationTitle(shortenStringToEllipsis(conversation.peerAddress, characterCount: 10))
 		.navigationBarTitleDisplayMode(.inline)
 	}
 
@@ -57,4 +58,19 @@ struct ConversationDetailView: View {
 			print("Error loading messages for \(conversation.peerAddress)")
 		}
 	}
+    
+    func shortenStringToEllipsis(_ input: String, characterCount: Int) -> String {
+        guard input.count > (characterCount + 3) else {
+            return input
+        }
+
+        let prefixLength = (characterCount - 1) / 2
+        let suffixLength = characterCount - prefixLength - 3
+
+        let prefix = String(input.prefix(prefixLength))
+        let suffix = String(input.suffix(suffixLength))
+
+        return "\(prefix)...\(suffix)"
+    }
+
 }

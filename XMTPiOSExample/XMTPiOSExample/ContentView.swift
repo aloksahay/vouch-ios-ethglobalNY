@@ -24,33 +24,36 @@ struct ContentView: View {
 	@State private var client: Client?
 
 	var body: some View {
-		VStack {
-			switch status {
-			case .unknown:
-				Button("Connect Wallet", action: connectWallet)
-				Button("Let me in", action: generateWallet)
-			case .connecting:
-				ProgressView("Connecting…")
-			case let .connected(client):
-				LoggedInView(client: client)
-			case let .error(error):
-				Text("Error: \(error)").foregroundColor(.red)
-			}
-		}
-		.task {
-			UIApplication.shared.registerForRemoteNotifications()
-
-			do {
-				_ = try await XMTPPush.shared.request()
-			} catch {
-				print("Error requesting push access: \(error)")
-			}
-		}
-		.sheet(isPresented: $isShowingQRCode) {
-            if let qrCodeImage = qrCodeImage {
-                QRCodeSheetView(image: qrCodeImage)
+        ZStack {
+            Color(hex: "F4DAC7").ignoresSafeArea()
+            VStack {
+                switch status {
+                case .unknown:
+                    Button("Connect Wallet", action: connectWallet)
+                    Button("Let me in", action: generateWallet)
+                case .connecting:
+                    ProgressView("Connecting…")
+                case let .connected(client):
+                    LoggedInView(client: client)
+                case let .error(error):
+                    Text("Error: \(error)").foregroundColor(.red)
+                }
             }
-		}
+            .task {
+                UIApplication.shared.registerForRemoteNotifications()
+                
+                do {
+                    _ = try await XMTPPush.shared.request()
+                } catch {
+                    print("Error requesting push access: \(error)")
+                }
+            }
+            .sheet(isPresented: $isShowingQRCode) {
+                if let qrCodeImage = qrCodeImage {
+                    QRCodeSheetView(image: qrCodeImage)
+                }
+            }
+        }
 	}
     
     func connectWallet()  {
@@ -115,10 +118,12 @@ struct ContentView: View {
 		Task {
 			do {
 				let wallet = try PrivateKey.generate()
-				let client = try await Client.create(account: wallet, options: .init(api: .init(env: .dev, isSecure: true, appVersion: "XMTPTest/v1.0.0")))
+				let client = try await Client.create(account: wallet, options: .init(api: .init(env: .production, isSecure: true, appVersion: "XMTPTest/v1.0.0")))
 
 				let keysData = try client.privateKeyBundle.serializedData()
 				Persistence().saveKeys(keysData)
+                
+                print(wallet.address)
 
 				await MainActor.run {
 					self.status = .connected(client)

@@ -13,24 +13,24 @@ struct MessageListView: View {
 	var messages: [DecodedMessage]
 
 	var body: some View {
-		ScrollViewReader { proxy in
-			ScrollView {
-				VStack {
-					ForEach(Array(messages.sorted(by: { $0.sent < $1.sent }).enumerated()), id: \.0) { i, message in
-						MessageCellView(myAddress: myAddress, message: message)
-							.transition(.scale)
-							.id(i)
-					}
-					Spacer()
-						.onChange(of: messages.count) { _ in
-							withAnimation {
-								proxy.scrollTo(messages.count - 1, anchor: .bottom)
-							}
-						}
-				}
-			}
-			.padding(.horizontal)
-		}
+        ScrollViewReader { proxy in
+            ScrollView {
+                VStack {
+                    ForEach(Array(messages.sorted(by: { $0.sent < $1.sent }).enumerated()), id: \.0) { i, message in
+                        MessageCellView(myAddress: myAddress, message: message)
+                            .transition(.scale)
+                            .id(i)
+                    }
+                    Spacer()
+                        .onChange(of: messages.count) { _ in
+                            withAnimation {
+                                proxy.scrollTo(messages.count - 1, anchor: .bottom)
+                            }
+                        }
+                }
+            }
+        }
+        .padding(.horizontal)
 	}
 }
 
