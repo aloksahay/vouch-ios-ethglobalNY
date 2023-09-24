@@ -111,6 +111,7 @@ struct ContentView: View {
                             if accountManager.account.isConnected {
                                 
                                 let wallet = try PrivateKey.generate()
+                                
                                 let client = try await Client.create(account: wallet, options: .init(api: .init(env: .production, isSecure: true, appVersion: "XMTPTest/v1.0.0")))
                                 
                                 // let client = try await Client.create(account: accountManager.account, options: .init(api: .init(env: .dev)))
@@ -144,15 +145,22 @@ struct ContentView: View {
 	}
 
 	func generateWallet() {
+        
+        let wallet = AccountManager.getKey()
+        
 		Task {
 			do {
-				let wallet = try PrivateKey.generate()
-				let client = try await Client.create(account: wallet, options: .init(api: .init(env: .production, isSecure: true, appVersion: "XMTPTest/v1.0.0")))
+//				let wallet = try PrivateKey.generate()
+                
+                let keyData = try AccountManager.generate(privateKeyString: wallet!)
+                let account = try PrivateKey(keyData)
+                
+				let client = try await Client.create(account: account, options: .init(api: .init(env: .production, isSecure: true, appVersion: "XMTPTest/v1.0.0")))
 
 				let keysData = try client.privateKeyBundle.serializedData()
 				Persistence().saveKeys(keysData)
                 
-                print(wallet.address)
+                print(account.address)
 
 				await MainActor.run {
 					self.status = .connected(client)
