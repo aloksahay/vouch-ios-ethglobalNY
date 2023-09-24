@@ -25,7 +25,7 @@ class APIManager {
         
         let task = URLSession.shared.dataTask(with: url) { (data, response, error) in
             if let error = error {
-                completion(.failure(error))
+                completion(.failure(APIError.requestFailed))
                 return
             }
             
