@@ -3,6 +3,8 @@ import XMTP
 
 struct ConversationListView: View {
 	var client: XMTP.Client
+    
+    
 
 	@EnvironmentObject var coordinator: EnvironmentCoordinator
 	@State private var conversations: [ConversationInfo] = []
@@ -47,9 +49,9 @@ struct ConversationListView: View {
                                         //}
                                     }
                                     
-                                    if let message = conversationInfo.latestMessage {
-                                        
-                                        Text(truncateStringTo40Characters(message)) // Display the latest message
+                                    
+                                    if conversationInfo.latestMessage.isEmpty == false {
+                                        Text(truncateStringTo40Characters(conversationInfo.latestMessage)) // Display the latest message
                                             .font(.subheadline)
                                     
                                     } else {
