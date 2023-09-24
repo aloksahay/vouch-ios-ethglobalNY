@@ -45,6 +45,37 @@ class APIManager {
         
         task.resume()
     }
+    
+    func fetchNFTs(address: String, completion: @escaping (Result<[Collection], Error>) -> Void) {
+        
+        guard let url = URL(string: "https://api.web3.bio/profile/\(address)") else {
+            completion(.failure(APIError.invalidURL))
+            return
+        }
+        
+        let task = URLSession.shared.dataTask(with: url) { (data, response, error) in
+            if let error = error {
+                completion(.failure(error))
+                return
+            }
+            
+            guard let data = data else {
+                completion(.failure(APIError.invalidResponse))
+                return
+            }
+            
+            do {
+                let decoder = JSONDecoder()
+                let profiles = try JSONDecoder().decode([Collection].self, from: data)
+                completion(.success(profiles))
+            } catch {
+                completion(.failure(APIError.decodingFailed))
+            }
+        }
+        
+        task.resume()
+    }
+    
 }
 
 // Usage:
