@@ -1,10 +1,3 @@
-//
-//  NewConversationView.swift
-//  XMTPiOSExample
-//
-//  Created by Pat Nakajima on 12/7/22.
-//
-
 import SwiftUI
 import XMTP
 

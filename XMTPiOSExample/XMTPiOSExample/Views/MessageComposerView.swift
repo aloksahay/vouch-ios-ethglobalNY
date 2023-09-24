@@ -1,9 +1,3 @@
-//
-//  MessageComposerView.swift
-//  XMTPiOSExample
-//
-//  Created by Pat Nakajima on 12/2/22.
-//
 
 import SwiftUI
 import XMTP

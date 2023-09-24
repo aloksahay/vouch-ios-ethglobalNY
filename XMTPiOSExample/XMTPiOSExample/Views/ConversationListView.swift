@@ -1,10 +1,3 @@
-//
-//  ConversationListView.swift
-//  XMTPiOSExample
-//
-//  Created by Pat Nakajima on 12/2/22.
-//
-
 import SwiftUI
 import XMTP
 
@@ -19,7 +12,7 @@ struct ConversationListView: View {
         // Set the background color here
         NavigationView {
             ZStack {
-                Color(hex: "F4DAC7").ignoresSafeArea()
+                Color(.black).ignoresSafeArea()
                 VStack {
                     List {
                         ForEach(conversations, id: \.peerAddress) { conversation in
@@ -59,7 +52,7 @@ struct ConversationListView: View {
 					self.isShowingNewConversation = true
 				}) {
 					Label("New Conversation", systemImage: "plus")
-				}
+				}.foregroundColor(.white)
 			}
 		}
 		.sheet(isPresented: $isShowingNewConversation) {

@@ -40,6 +40,7 @@ struct XMTPiOSExampleApp: App {
 	var body: some Scene {
 		WindowGroup {
 			ContentView()
+                .background(Color.black)
 		}
 	}
 }

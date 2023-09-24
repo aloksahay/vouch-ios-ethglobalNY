@@ -1,10 +1,3 @@
-//
-//  MessageListView.swift
-//  XMTPiOSExample
-//
-//  Created by Pat Nakajima on 12/5/22.
-//
-
 import SwiftUI
 import XMTP
 

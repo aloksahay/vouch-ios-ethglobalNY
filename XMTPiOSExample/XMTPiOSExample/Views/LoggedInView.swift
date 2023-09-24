@@ -1,10 +1,3 @@
-//
-//  LoggedInView.swift
-//  XMTPiOSExample
-//
-//  Created by Pat Nakajima on 11/22/22.
-//
-
 import SwiftUI
 import XMTP
 
@@ -18,7 +11,7 @@ struct LoggedInView: View {
 	@StateObject var environmentCoordinator = EnvironmentCoordinator()
 
 	var body: some View {
-		NavigationStack(path: $environmentCoordinator.path) {
+		NavigationStack(path: $environmentCoordinator.path) {            
 			VStack {
 				ConversationListView(client: client)
 				VStack(alignment: .leading) {
@@ -29,6 +22,7 @@ struct LoggedInView: View {
 				}
 				.frame(maxWidth: .infinity)
 				.font(.caption)
+                .foregroundColor(Color(.gray))
 			}
 		}
 		.environmentObject(environmentCoordinator)

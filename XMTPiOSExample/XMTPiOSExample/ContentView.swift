@@ -25,23 +25,23 @@ struct ContentView: View {
 
 	var body: some View {
         ZStack {
-            Color(hex: "F4DAC7").ignoresSafeArea()
+            Color(.black).ignoresSafeArea()
             VStack {
                 switch status {
                 case .unknown:
                     Spacer()
-                    Image(uiImage: UIImage(named: "splashlogo")!)
+                    Image(uiImage: UIImage(named: "Logo")!)
                         .resizable()
                         .aspectRatio(contentMode: .fit)
                         .frame(maxWidth: .infinity)
-                        .padding(100)
-                    Text("Welcome to Vouch")
+                        .padding(80)
+                    Text("This is Vouch")
                         .font(.title)
-                        .foregroundColor(.black)
+                        .foregroundColor(.white)
                         .fontWeight(Font.Weight.bold)
                         .multilineTextAlignment(.center)
                         .padding(.top, 20)
-                    Text("We've got your back to protect you from the dark side of social.")
+                    Text("Protect yourself from the dark side of social.")
                         .font(.subheadline)
                         .foregroundColor(.gray)
                         .multilineTextAlignment(.center)
@@ -52,13 +52,18 @@ struct ContentView: View {
                             .foregroundColor(.white)
                             .frame(maxWidth: .infinity)
                             .padding()
-                            .background(Color(hex: "F68633"))
+                            .background(Color(hex: "872d86")) //theme color
                             .cornerRadius(30)
                     }.padding(EdgeInsets(top: 20, leading: 20, bottom: 0, trailing: 20))
                     Button("Let me in", action: generateWallet)
+                        .foregroundColor(Color(hex: "872d86"))
+                        .font(.title2)
+                        .fontWeight(Font.Weight.semibold)
                         .padding(EdgeInsets.init(top: 20, leading: 0, bottom: 0, trailing: 0))
                 case .connecting:
                     ProgressView("Connecting…")
+                        .progressViewStyle(DefaultProgressViewStyle())
+                        .accentColor(Color(.white))
                 case let .connected(client):
                     LoggedInView(client: client)
                 case let .error(error):
