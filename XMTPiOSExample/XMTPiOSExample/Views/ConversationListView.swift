@@ -3,8 +3,6 @@ import XMTP
 
 struct ConversationListView: View {
 	var client: XMTP.Client
-    
-    
 
 	@EnvironmentObject var coordinator: EnvironmentCoordinator
 	@State private var conversations: [ConversationInfo] = []
@@ -31,6 +29,7 @@ struct ConversationListView: View {
                                     HStack {
                                         Text(shortenStringToEllipsis(conversationInfo.conversation.peerAddress, characterCount: 10))
                                             .font(.headline)
+                                            .foregroundColor(Color.black)
                                         
                                         // if conversation.isActiveOnEns {
                                         Image(uiImage: UIImage(named: "ens_icon")!)
@@ -49,14 +48,15 @@ struct ConversationListView: View {
                                         //}
                                     }
                                     
-                                    
                                     if conversationInfo.latestMessage.isEmpty == false {
                                         Text(truncateStringTo40Characters(conversationInfo.latestMessage)) // Display the latest message
                                             .font(.subheadline)
+                                            .foregroundColor(Color.black)
                                     
                                     } else {
                                         Text("No messages yet")
                                             .font(.subheadline)
+                                            .foregroundColor(Color.black)
                                     }
                                     
                                 }
@@ -93,7 +93,7 @@ struct ConversationListView: View {
                         
                     let latestMessage = await fetchLatestMessage(for: conversation)
                     
-                    if let message = latestMessage as? DecodedMessage {
+                    if let message = latestMessage {
                         
                         var bodyText: String {
                             // swiftlint:disable force_try
@@ -149,7 +149,7 @@ struct ConversationListView: View {
                 
                 
                 
-                if let message = latestMessage as? DecodedMessage {
+                if let message = latestMessage {
                     
                     var bodyText: String {
                         // swiftlint:disable force_try
